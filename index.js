@@ -28,7 +28,13 @@ async function run() {
         await client.connect();
         const serviceCollection = client.db('stowageManagement').collection('service');
 
-       
+        app.get('/service', async (req, res) => {
+            const query = {};
+            // const services = await serviceCollection.find(query);
+           const cursor = serviceCollection.find(query);
+           const services = await cursor.toArray();
+            res.send(services);
+        });
 
         
 
