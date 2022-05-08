@@ -10,7 +10,15 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // middleware
-app.use(cors());
+// app.use(cors());
+
+const corsConfig = {
+  origin: true,
+  credentials: true,
+};
+app.use(cors(corsConfig));
+app.options('*', cors(corsConfig));
+
 app.use(express.json());
 
 // const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.vwx9p.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
@@ -42,6 +50,14 @@ async function run() {
             const service = await serviceCollection.findOne(query);
             res.send(service);
         });
+
+        //get user
+    app.get("/user", async (req, res) => {
+      const query = {};
+      const cursor = serviceCollection.find(query);
+      const users = await cursor.toArray();
+      res.send(users);
+    });
 
         // POST
         app.post('/service', async(req, res) =>{
